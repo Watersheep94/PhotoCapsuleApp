@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TimeCapsule</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="camera_info">Take a picture of your day!</string>
+    <string name="gallery_info">View your most recent pictures!</string>
+    <string name="limit_reached">You have reached the limit of pictures taken today.</string>
+    <string name="date_info">Current date</string>
+    <string name="scrapbook_info">Access the scrapbook!</string>
+    <color name="white">#FFFFFF</color>
+
+</resources>
