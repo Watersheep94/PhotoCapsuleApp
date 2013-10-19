@@ -24,7 +24,7 @@ import android.view.View;
 public class CameraActivity extends Activity {
 	
 	private static final String TAG = "CAMERA";
-	public static final String EXTRA_PICTURE_TAKEN = "camera_activity_picture_taken";
+	public static final String EXTRA_PICTURE_NAME = "camera_activity_picture_name";
 	
 	private Camera camera;
 	private SurfaceHolder surfaceHolder;
@@ -33,7 +33,7 @@ public class CameraActivity extends Activity {
 	private PictureCallback jpegCallBack;
 	private ShutterCallback shutterCallBack;
 	
-	public static boolean pictureTaken;
+	public static String pictureFileName;
 	
 	@TargetApi(11)
 	@Override
@@ -42,8 +42,8 @@ public class CameraActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "In onCreate after super");
 		Log.d(TAG, "Layout created!");
-		pictureTaken = false;
 		setContentView(R.layout.activity_camera);
+		pictureFileName = null;
 		
 		surfaceView = (SurfaceView)findViewById(R.id.camera_view);
 		try {
@@ -89,10 +89,11 @@ public class CameraActivity extends Activity {
 			public void onPictureTaken(byte[] data, Camera camera) {
 				FileOutputStream outStream = null;
 				try {
-				String fileName = String.format("pic_%tD%n_%d", Calendar.getInstance(), System.currentTimeMillis());
-					outStream = openFileOutput(fileName, Context.MODE_PRIVATE);
+					pictureFileName = String.format("pic_%tD%n_%d", Calendar.getInstance(), System.currentTimeMillis());
+					outStream = openFileOutput(pictureFileName, Context.MODE_PRIVATE);
 					Log.d(TAG, "onPictureTaken - wrote bytes: " + data.length);
 					outStream.write(data);
+					
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
@@ -101,19 +102,20 @@ public class CameraActivity extends Activity {
 				}
 			}
 		};
-		pictureTaken = true;
 		stopCamera();
 	}
 	
 	protected void stopCamera() {
-		onStop();
+		Intent data = new Intent();
+		data.putExtra(EXTRA_PICTURE_NAME, pictureFileName);
+
+		camera.stopPreview();
+		camera.release();
+		setResult(RESULT_OK, data);
 	}
 	
 	@Override
 	protected void onStop() {
-		Intent data = new Intent();
-		data.putExtra(EXTRA_PICTURE_TAKEN, pictureTaken);
-		
 		camera.stopPreview();
 		camera.release();
 	}

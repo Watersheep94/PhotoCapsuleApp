@@ -4,9 +4,9 @@
  * Copyright (c) 2013
  */
 
-
 package com.example.timecapsule;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -29,10 +29,10 @@ public class CapsuleActivity extends Activity {
 	private static final String TAG = "CapsuleActivity";
 	private static final String LIMIT = "limit_reached";
 	private static final String PICS_TAKEN = "pictures_taken_today";
-	private static final String TARGET_DATE = "target_date";
+	private static final String CURRENT_PICTURE = "current_pic";
+	private static final String PICTURE_GALLERY = "picture_gallery";
 	
 	private static boolean limitReached = false;
-	private static boolean targetDateReached = false;
 	private static int numOfPicturesTakenToday;
 	
 	private ImageButton mCameraButton;
@@ -47,8 +47,9 @@ public class CapsuleActivity extends Activity {
 	
 	private String targetDate = "Jan 1";
 	
-	private String[] mPictureGallery; //stores all the picture names
-	private String currentPicture;    //stores current picture name
+	private ArrayList<String> mPictureGallery; //stores all the picture names in temporary gallery
+	private String[] mScrapbookPictures; //stores all each day's picture for the year
+	private String mCurrentPicture;    //stores current picture name
 	
 	@TargetApi(11)
 	@Override
@@ -110,19 +111,28 @@ public class CapsuleActivity extends Activity {
 			}
 		});
 		
-		
+		if (savedInstanceState != null) {
+			
+			numOfPicturesTakenToday = savedInstanceState.getInt(PICS_TAKEN);
+	    	limitReached = savedInstanceState.getBoolean(LIMIT);
+	    	mCurrentPicture = savedInstanceState.getString(CURRENT_PICTURE);
+	    	mPictureGallery = savedInstanceState.getStringArrayList(PICTURE_GALLERY);
+		}
 	}
 	
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-    	boolean pictureTaken = data.getBooleanExtra(CameraActivity.EXTRA_PICTURE_TAKEN, false);
+    	String pictureTaken = data.getStringExtra(CameraActivity.EXTRA_PICTURE_NAME);
     	
-    	if (pictureTaken) {
+    	if (pictureTaken != null) {
     		numOfPicturesTakenToday++;
+    		mCurrentPicture = pictureTaken;
+    		mPictureGallery.add(mCurrentPicture);
+    		
     		if (numOfPicturesTakenToday >= 3) {
     			limitReached = true;
     		}
-    	}
+    	} 
     }
 
     @Override
@@ -141,9 +151,10 @@ public class CapsuleActivity extends Activity {
     	String previousDate = mDate.format(mDateValue);
     	//recognize that the day has passed and reset the numOfPicturesTakenToday (DO LATER)
     	
-    	savedInstanceState.putBoolean(TARGET_DATE, targetDateReached);
     	savedInstanceState.putInt(PICS_TAKEN, numOfPicturesTakenToday);
     	savedInstanceState.putBoolean(LIMIT, limitReached);
+    	savedInstanceState.putString(CURRENT_PICTURE, mCurrentPicture);
+    	savedInstanceState.putStringArrayList(PICTURE_GALLERY, mPictureGallery);
     }
 	
 	@Override
