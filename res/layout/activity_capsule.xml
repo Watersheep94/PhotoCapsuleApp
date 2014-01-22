@@ -40,12 +40,14 @@
         android:layout_toRightOf="@+id/gallery_button"
         android:contentDescription="@string/camera_info"
         android:src="@drawable/ic_action_camera" />
-    
+
     <ImageButton
         android:id="@+id/scrapbook_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/gallery_button"
+        android:layout_alignTop="@+id/current_date"
         android:contentDescription="@string/scrapbook_info"
-        android:src="@drawable/ic_action_view_as_list"/>
+        android:src="@drawable/ic_action_view_as_list" />
 
 </RelativeLayout>

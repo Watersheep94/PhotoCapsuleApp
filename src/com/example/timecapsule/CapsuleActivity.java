@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -47,7 +48,7 @@ public class CapsuleActivity extends Activity {
 	
 	private String targetDate = "Jan 1";
 	
-	private ArrayList<String> mPictureGallery; //stores all the picture names in temporary gallery
+	private ArrayList<String> mPictureNames; //stores all the picture names in temporary gallery
 	private String[] mScrapbookPictures; //stores all each day's picture for the year
 	private String mCurrentPicture;    //stores current picture name
 	
@@ -65,6 +66,8 @@ public class CapsuleActivity extends Activity {
 		mDateValue = new Date();
 		String date = mDateWithoutYear.format(mDateValue);
 		mDateButton.setText(mDate.format(mDateValue));
+		
+		mPictureNames = new ArrayList<String>();
 		
 		mScrapbookButton = (ImageButton)findViewById(R.id.scrapbook_button);
 		if (date.equals(targetDate)) {
@@ -106,7 +109,9 @@ public class CapsuleActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				Intent intent = new Intent(CapsuleActivity.this, GalleryActivity.class);
+				intent.putExtra(GalleryActivity.EXTRA_PICTURE_NAMES, mPictureNames);
+				startActivity(intent);
 				
 			}
 		});
@@ -116,20 +121,33 @@ public class CapsuleActivity extends Activity {
 			numOfPicturesTakenToday = savedInstanceState.getInt(PICS_TAKEN);
 	    	limitReached = savedInstanceState.getBoolean(LIMIT);
 	    	mCurrentPicture = savedInstanceState.getString(CURRENT_PICTURE);
-	    	mPictureGallery = savedInstanceState.getStringArrayList(PICTURE_GALLERY);
+	    	mPictureNames = savedInstanceState.getStringArrayList(PICTURE_GALLERY);
 		}
 	}
 	
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-    	String pictureTaken = data.getStringExtra(CameraActivity.EXTRA_PICTURE_NAME);
+    	Log.d(TAG, "In activity result");
     	
-    	if (pictureTaken != null) {
-    		numOfPicturesTakenToday++;
-    		mCurrentPicture = pictureTaken;
-    		mPictureGallery.add(mCurrentPicture);
+    	if (data == null){
+    		Log.d(TAG, "DATA IS NULL!");
+    		return;
+    	}
+    	
+    	String pictureName = data.getStringExtra(CameraActivity.EXTRA_PICTURE_NAME);
+    	String pictureDate = data.getStringExtra(CameraActivity.EXTRA_PICTURE_DATE);
+    	
+    	Log.d(TAG, "GOT INTENT DATA: " + pictureName);
+    	
+    	if (!pictureName.isEmpty()) {
     		
-    		if (numOfPicturesTakenToday >= 3) {
+    		numOfPicturesTakenToday++;
+    		mCurrentPicture = pictureName;
+    		mPictureNames.add(mCurrentPicture);
+    		Log.d(TAG, "Picture added!");
+    		Log.d(TAG, mPictureNames.size() + " PICTURES TOTAL!");
+    		
+    		if (numOfPicturesTakenToday >= 10) {
     			limitReached = true;
     		}
     	} 
@@ -146,6 +164,11 @@ public class CapsuleActivity extends Activity {
     }
     
     @Override
+    public void onStop() {
+    	super.onStop();
+    }
+    
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
     	
     	String previousDate = mDate.format(mDateValue);
@@ -154,7 +177,7 @@ public class CapsuleActivity extends Activity {
     	savedInstanceState.putInt(PICS_TAKEN, numOfPicturesTakenToday);
     	savedInstanceState.putBoolean(LIMIT, limitReached);
     	savedInstanceState.putString(CURRENT_PICTURE, mCurrentPicture);
-    	savedInstanceState.putStringArrayList(PICTURE_GALLERY, mPictureGallery);
+    	savedInstanceState.putStringArrayList(PICTURE_GALLERY, mPictureNames);
     }
 	
 	@Override
