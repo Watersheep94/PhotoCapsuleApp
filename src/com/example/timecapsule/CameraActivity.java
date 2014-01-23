@@ -1,6 +1,5 @@
 package com.example.timecapsule;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -80,25 +79,17 @@ public class CameraActivity extends Activity {
 					Log.d(TAG, "onPictureTaken name: " + pictureFileName);
 					Log.d(TAG, "pictureFileDate: " + pictureFileDate);
 		
-					try {
+					
 						
-						//File directory = getDir(pictureFileDate, Context.MODE_PRIVATE);
-						//File path = new File(directory, pictureFileName);
-						//FileOutputStream outStream = new FileOutputStream(path);
+					//File directory = getDir(pictureFileDate, Context.MODE_PRIVATE);
+					//File path = new File(directory, pictureFileName);
+					//FileOutputStream outStream = new FileOutputStream(path);
 						
-						FileOutputStream outStream = openFileOutput(pictureFileName, Context.MODE_PRIVATE);
-						picture.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-						//outStream.write(data);
-						outStream.close();
+					Intent intent = new Intent(CameraActivity.this, ConfirmPicture.class);
+					intent.putExtra(ConfirmPicture.PIC_DATA_EXTRA, data);
+					startActivity(intent);
 						
-					} catch (FileNotFoundException e) {
-						
-						e.printStackTrace();
-					}
-					 catch (IOException e) {
-				
-						e.printStackTrace();
-					}
+					
 					
 					sendData();
 					mCamera.startPreview(); //restart preview since preview display	is destroyed after taking pic
