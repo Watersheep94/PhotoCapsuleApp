@@ -85,8 +85,8 @@ public class CameraActivity extends Activity {
 					//File path = new File(directory, pictureFileName);
 					//FileOutputStream outStream = new FileOutputStream(path);
 						
-					Intent intent = new Intent(CameraActivity.this, ConfirmPicture.class);
-					intent.putExtra(ConfirmPicture.PIC_DATA_EXTRA, data);
+					Intent intent = new Intent(CameraActivity.this, ConfirmPictureActivity.class);
+					intent.putExtra(ConfirmPictureActivity.PIC_DATA_EXTRA, data);
 					startActivity(intent);
 						
 					
