@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -46,10 +47,9 @@ public class CapsuleActivity extends Activity {
 	private SimpleDateFormat mDateWithoutYear;
 	private Date mDateValue;
 	
-	private String targetDate = "Jan 1";
+	private String pictureTargetDate = "";
 	
-	private ArrayList<String> mPictureNames; //stores all the picture names in temporary gallery
-	private String[] mScrapbookPictures; //stores all each day's picture for the year
+	private ArrayList<HashMap<String, String>> mPictureNames; //stores all the picture names in gallery
 	private String mCurrentPicture;    //stores current picture name
 	
 	@TargetApi(11)
@@ -67,9 +67,12 @@ public class CapsuleActivity extends Activity {
 		String date = mDateWithoutYear.format(mDateValue);
 		mDateButton.setText(mDate.format(mDateValue));
 		
-		mPictureNames = new ArrayList<String>();
+		mPictureNames = new ArrayList<HashMap<String,String>>();
 		
+		
+		/*
 		mScrapbookButton = (ImageButton)findViewById(R.id.scrapbook_button);
+		
 		if (date.equals(targetDate)) {
 			
 			mScrapbookButton.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +87,7 @@ public class CapsuleActivity extends Activity {
 		} else {
 			mScrapbookButton.setVisibility(View.GONE);
 		}
+		*/
 	
 		mCameraButton = (ImageButton)findViewById(R.id.camera_button);
 		mCameraButton.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +125,7 @@ public class CapsuleActivity extends Activity {
 			numOfPicturesTakenToday = savedInstanceState.getInt(PICS_TAKEN);
 	    	limitReached = savedInstanceState.getBoolean(LIMIT);
 	    	mCurrentPicture = savedInstanceState.getString(CURRENT_PICTURE);
-	    	mPictureNames = savedInstanceState.getStringArrayList(PICTURE_GALLERY);
+	    	mPictureNames = (ArrayList<HashMap<String,String>>) savedInstanceState.getSerializable(PICTURE_GALLERY);
 		}
 	}
 	
@@ -136,6 +140,7 @@ public class CapsuleActivity extends Activity {
     	
     	String pictureName = data.getStringExtra(CameraActivity.EXTRA_PICTURE_NAME);
     	String pictureDate = data.getStringExtra(CameraActivity.EXTRA_PICTURE_DATE);
+    	String pictureTargetDate = data.getStringExtra(CameraActivity.EXTRA_PICTURE_TARGET_DATE);
     	
     	Log.d(TAG, "GOT INTENT DATA: " + pictureName);
     	
@@ -177,7 +182,7 @@ public class CapsuleActivity extends Activity {
     	savedInstanceState.putInt(PICS_TAKEN, numOfPicturesTakenToday);
     	savedInstanceState.putBoolean(LIMIT, limitReached);
     	savedInstanceState.putString(CURRENT_PICTURE, mCurrentPicture);
-    	savedInstanceState.putStringArrayList(PICTURE_GALLERY, mPictureNames);
+    	savedInstanceState.putSerializable(PICTURE_GALLERY, mPictureNames);
     }
 	
 	@Override

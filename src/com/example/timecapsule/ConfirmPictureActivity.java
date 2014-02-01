@@ -1,5 +1,10 @@
 package com.example.timecapsule;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,19 +17,26 @@ import android.widget.ImageView;
 public class ConfirmPictureActivity extends FragmentActivity {
 	
 	public static final String PIC_DATA_EXTRA = "picture_data";
-	private static byte[] pic_data;
+	public static final String PIC_NAME_EXTRA = "picture_name";
+	public static final String PIC_TARGET_DATE_EXTRA = "picture_target_date";
+	
+	private static byte[] pictureData;
+	private static String pictureFileName;
 	Bitmap picture;
 	private ImageView image;
-	private DialogFragment datePicker;
+	private DatePickerFragment datePicker;
+	private String targetDate;
+	Intent i;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_confirmpicture);
 		
-		pic_data = getIntent().getByteArrayExtra(PIC_DATA_EXTRA);
+		pictureData = getIntent().getByteArrayExtra(PIC_DATA_EXTRA);
+		pictureFileName = getIntent().getStringExtra(PIC_NAME_EXTRA);
 		
-		picture = BitmapFactory.decodeByteArray(pic_data, 0, pic_data.length);
+		picture = BitmapFactory.decodeByteArray(pictureData, 0, pictureData.length);
 		
 		image = (ImageView) findViewById(R.id.confirm_picture_view);
 		image.setImageBitmap(picture);
@@ -32,12 +44,50 @@ public class ConfirmPictureActivity extends FragmentActivity {
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		
-		DialogFragment datePicker = new DatePickerFragment();
+		datePicker = new DatePickerFragment();
 		datePicker.show(getSupportFragmentManager(), "datePicker");
 		
-		//FileOutputStream outStream = openFileOutput(pictureFileName, Context.MODE_PRIVATE);
-		//picture.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-		//outStream.write(data);
-		//outStream.close();
+		i = new Intent();
+		
+		if (datePicker.isDateSet == true) {
+			
+			try {
+				
+				FileOutputStream outStream = openFileOutput(pictureFileName, Context.MODE_PRIVATE);
+				picture.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+				outStream.close();
+				
+				targetDate = datePicker.mMonth + " " + datePicker.mDay + ", " + datePicker.mYear;
+				i.putExtra(targetDate, PIC_TARGET_DATE_EXTRA);
+				setResult(RESULT_OK, i);
+				finish();
+				
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	protected void sendNullData() {
+		
+		if (datePicker.isDateSet == false) {
+			targetDate = null;
+			i.putExtra(targetDate, PIC_TARGET_DATE_EXTRA);
+			setResult(RESULT_OK, i);
+		}
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		sendNullData();
+		finish();
+	}
+	
+	protected void onStop() {
+		super.onStop();
+		sendNullData();
+		finish();
 	}
 }

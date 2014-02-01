@@ -1,6 +1,7 @@
 package com.example.timecapsule;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -36,7 +37,7 @@ public class ImageAdapter extends BaseAdapter{
 	};
 	*/
 	
-	public ImageAdapter(Context c, ArrayList<String> pictureNames){
+	public ImageAdapter(Context c, ArrayList<HashMap<String,String>> pictureNames){
 		mContext = c;
 		mPictureNames = c.fileList();
 		

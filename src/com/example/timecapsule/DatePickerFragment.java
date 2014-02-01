@@ -10,20 +10,29 @@ import android.widget.DatePicker;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 	
+	public static int mYear;
+	public static int mMonth;
+	public static int mDay;
+	public static boolean isDateSet;
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		
 		final Calendar c = Calendar.getInstance();
-		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH);
-		int day = c.get(Calendar.DAY_OF_MONTH);
+		mYear = c.get(Calendar.YEAR);
+		mMonth = c.get(Calendar.MONTH);
+		mDay = c.get(Calendar.DAY_OF_MONTH);
+		isDateSet = false;
 		
-		return new DatePickerDialog(getActivity(), this, year, month, day);
+		return new DatePickerDialog(getActivity(), this, mYear, mMonth, mDay);
 		
 	}
 	
 	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-		
+		mYear = year;
+		mMonth = monthOfYear;
+		mDay = dayOfMonth;
+		isDateSet = true;
 	}
 
 }

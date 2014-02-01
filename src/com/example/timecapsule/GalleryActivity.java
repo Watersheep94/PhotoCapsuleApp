@@ -1,6 +1,7 @@
 package com.example.timecapsule;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,7 +17,7 @@ public class GalleryActivity extends Activity {
 	
 	static GridView mGallery;
 	public static String EXTRA_PICTURE_NAMES = "picture_names";
-	private static ArrayList<String> mPictureNames;
+	private static ArrayList<HashMap<String,String>> mPictureNames;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,7 @@ public class GalleryActivity extends Activity {
 		
 		Log.d(TAG, "In Gallery onCreate()");
 		
-		mPictureNames = getIntent().getStringArrayListExtra(EXTRA_PICTURE_NAMES);
+		mPictureNames = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra(EXTRA_PICTURE_NAMES);
 		
 		
 		Log.d(TAG, mPictureNames.size() + " PICTURES IN GALLERY!");

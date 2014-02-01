@@ -25,6 +25,7 @@ public class CameraActivity extends Activity {
 	public static final String TAG = "CAMERA";
 	public static final String EXTRA_PICTURE_NAME = "camera_activity_picture_name";
 	public static final String EXTRA_PICTURE_DATE = "camera_activity_picture_date";
+	public static final String EXTRA_PICTURE_TARGET_DATE = "camera_activity_picture_date";
 	
 	private static Camera mCamera;
 	private CameraPreview mPreview;
@@ -39,6 +40,7 @@ public class CameraActivity extends Activity {
 	
 	public String pictureFileName;
 	public String pictureFileDate;
+	public String pictureTargetDate;
 	
 	Intent data;
 	
@@ -87,12 +89,12 @@ public class CameraActivity extends Activity {
 						
 					Intent intent = new Intent(CameraActivity.this, ConfirmPictureActivity.class);
 					intent.putExtra(ConfirmPictureActivity.PIC_DATA_EXTRA, data);
-					startActivity(intent);
+					intent.putExtra(ConfirmPictureActivity.PIC_NAME_EXTRA, pictureFileName);
+					startActivityForResult(intent, 0);
 						
-					
-					
-					sendData();
-					mCamera.startPreview(); //restart preview since preview display	is destroyed after taking pic
+				
+					//sendData();
+					//mCamera.startPreview(); //restart preview since preview display is destroyed after taking pic
 			}
 		};
 		
@@ -119,14 +121,19 @@ public class CameraActivity extends Activity {
 		return c;
 	}
 	
-	protected void sendData() {
+	protected void sendData(String pictureTargetDate) {
 		
-		data = new Intent();
-		data.putExtra(EXTRA_PICTURE_NAME, pictureFileName);
-		data.putExtra(EXTRA_PICTURE_DATE, pictureFileDate);
-		Log.d(TAG, "pictureFileName:" + pictureFileName);
-		mCamera.stopPreview();
-		setResult(RESULT_OK, data);
+		if (pictureTargetDate != null) {
+			data = new Intent();
+			data.putExtra(EXTRA_PICTURE_NAME, pictureFileName);
+			data.putExtra(EXTRA_PICTURE_DATE, pictureFileDate);
+			data.putExtra(EXTRA_PICTURE_TARGET_DATE, pictureTargetDate);
+			Log.d(TAG, "pictureFileName:" + pictureFileName);
+			setResult(RESULT_OK, data);
+			mCamera.stopPreview();
+			stopCamera();
+			finish();
+		}
 	}
 	
 	protected void stopCamera() {
@@ -135,6 +142,13 @@ public class CameraActivity extends Activity {
 			mCamera.release();
 			mCamera = null;
 		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		pictureTargetDate = data.getStringExtra(ConfirmPictureActivity.PIC_TARGET_DATE_EXTRA);
+		
+		sendData(pictureTargetDate);
 	}
 	
 	@Override
