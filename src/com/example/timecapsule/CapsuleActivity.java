@@ -148,7 +148,9 @@ public class CapsuleActivity extends Activity {
     		
     		numOfPicturesTakenToday++;
     		mCurrentPicture = pictureName;
-    		mPictureNames.add(mCurrentPicture);
+    		HashMap<String,String> picture = new HashMap<String,String>();
+    		picture.put(mCurrentPicture, pictureTargetDate);
+    		mPictureNames.add(picture);
     		Log.d(TAG, "Picture added!");
     		Log.d(TAG, mPictureNames.size() + " PICTURES TOTAL!");
     		
