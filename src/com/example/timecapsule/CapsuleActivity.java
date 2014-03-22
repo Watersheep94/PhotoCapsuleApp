@@ -59,7 +59,6 @@ public class CapsuleActivity extends Activity {
 		setContentView(R.layout.activity_capsule);
 		ActionBar bar = getActionBar();
 		bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#8B008B"))); //sets the action bar to purple
-	
 		mDateButton = (Button)findViewById(R.id.current_date);
 		mDate = new SimpleDateFormat("MMM d, yyyy");
 		mDateWithoutYear = new SimpleDateFormat("MMM d");
@@ -69,26 +68,6 @@ public class CapsuleActivity extends Activity {
 		
 		mPictureNames = new ArrayList<HashMap<String,String>>();
 		
-		
-		/*
-		mScrapbookButton = (ImageButton)findViewById(R.id.scrapbook_button);
-		
-		if (date.equals(targetDate)) {
-			
-			mScrapbookButton.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-			
-		} else {
-			mScrapbookButton.setVisibility(View.GONE);
-		}
-		*/
-	
 		mCameraButton = (ImageButton)findViewById(R.id.camera_button);
 		mCameraButton.setOnClickListener(new View.OnClickListener() {
 			

@@ -1,26 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/confirm_picture_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
- 	android:orientation="vertical" >
+ 	android:orientation="vertical" 
+    android:adjustViewBounds="true"
+    android:gravity="center_vertical"
+    android:scaleType="fitXY"
+    android:layout_x="0dp" 
+    android:layout_y="0dp" >
     
-    <ImageView
-        android:id="@+id/confirm_picture_view"
-    	android:layout_width="match_parent"
-    	android:layout_height="match_parent" 
-    	android:adjustViewBounds="true"
-    	android:gravity="center_vertical"
-    	android:scaleType="fitXY"
-    	android:layout_x="0dp" 
-    	android:layout_y="0dp" />
-    
-    <fragment
-     	android:name ="com.example.timecapsule.DatePickerFragment"
-     	android:id="@+id/date_picker_fragment"
-     	android:layout_weight="1"
-     	android:layout_width="wrap_content"
-     	android:layout_height="wrap_content"
-     	/>
-
-</LinearLayout>
+</ImageView>

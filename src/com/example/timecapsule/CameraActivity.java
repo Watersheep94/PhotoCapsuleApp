@@ -90,6 +90,7 @@ public class CameraActivity extends Activity {
 					Intent intent = new Intent(CameraActivity.this, ConfirmPictureActivity.class);
 					intent.putExtra(ConfirmPictureActivity.PIC_DATA_EXTRA, data);
 					intent.putExtra(ConfirmPictureActivity.PIC_NAME_EXTRA, pictureFileName);
+					Log.d(TAG, "Before starting ConfirmPictureActivity");
 					startActivityForResult(intent, 0);
 						
 				
@@ -147,7 +148,7 @@ public class CameraActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		pictureTargetDate = data.getStringExtra(ConfirmPictureActivity.PIC_TARGET_DATE_EXTRA);
-		
+		Log.d(TAG, "Returned data from ConfirmPicture");
 		sendData(pictureTargetDate);
 	}
 	

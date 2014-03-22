@@ -20,22 +20,6 @@ public class ImageAdapter extends BaseAdapter{
 	private Context mContext;
 	private static String[] mPictureNames;
 	
-	//image references 
-	/*
-	private Integer[] mImages = {
-			 R.drawable.sample_2, R.drawable.sample_3,
-	         R.drawable.sample_4, R.drawable.sample_5,
-	         R.drawable.sample_6, R.drawable.sample_7,
-	         R.drawable.sample_0, R.drawable.sample_1,
-	         R.drawable.sample_2, R.drawable.sample_3,
-	         R.drawable.sample_4, R.drawable.sample_5,
-	         R.drawable.sample_6, R.drawable.sample_7,
-	         R.drawable.sample_0, R.drawable.sample_1,
-	         R.drawable.sample_2, R.drawable.sample_3,
-	         R.drawable.sample_4, R.drawable.sample_5,
-	         R.drawable.sample_6, R.drawable.sample_7
-	};
-	*/
 	
 	public ImageAdapter(Context c, ArrayList<HashMap<String,String>> pictureNames){
 		mContext = c;
@@ -43,13 +27,7 @@ public class ImageAdapter extends BaseAdapter{
 		
 		Log.d(TAG, "In ImageAdapter Constructor");
 		Log.d(TAG, "mPictureNames size: " + mPictureNames.length);
-		/*
-		for (String name : pictureNames) {
-			ImageView imageView = new ImageView(mContext);;
-			imageView.setImageDrawable(Drawable.createFromPath(name));
-			mImages.add(imageView);
-		}
-		*/
+	
 	}
 	
 	public int getCount() {
